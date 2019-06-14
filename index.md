@@ -40,7 +40,6 @@ Having trouble with Pages? Check out our [documentation](https://help.github.com
 This is a basic UNIX shell implementation that is running on a Linux sub-system in Windows, written in C++. Here is how it works...
 
 ### Enter the Shell
-Once I run the command. I get the current path of the directory I am in.
 
 ![shell-1](./images/shell-1.PNG)
 
@@ -49,22 +48,18 @@ I can run ls and view the contents of this folder.
 ![shell-1](./images/shell-2.PNG)
 
 ### Make a directory
-I can make a new directory...
 
 ![shell-1](./images/shell-3.PNG)
 
 ### Change Directory
-I can change directories. Here I change into the empty directory that I made. 
 
 ![shell-1](./images/shell-4.PNG)
 
-### Make a File
-Make a new file with 'touch' and view it in the directory.
+### Make a new file
 
 ![shell-1](./images/shell-5.PNG)
 
 ### Input Redirection
-Write to the file using 'echo' and input redirection, then read it using 'cat'.
 
 ![shell-1](./images/shell-6.PNG)
 
