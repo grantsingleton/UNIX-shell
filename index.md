@@ -25,7 +25,6 @@ Syntax highlighted code block
 
 [Link](url) and ![Image](src)
 ```
-![shell-1](./images/shell-1.PNG)
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
@@ -36,3 +35,23 @@ Your Pages site will use the layout and styles from the Jekyll theme you have se
 ### Support or Contact
 
 Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+
+![shell-1](./images/shell-1.PNG)
+
+![shell-1](./images/shell-2.PNG)
+
+![shell-1](./images/shell-3.PNG)
+
+![shell-1](./images/shell-4.PNG)
+
+![shell-1](./images/shell-5.PNG)
+
+![shell-1](./images/shell-6.PNG)
+
+![shell-1](./images/shell-7.PNG)
+
+![shell-1](./images/shell-8.PNG)
+
+![shell-1](./images/shell-9.PNG)
+
+![shell-1](./images/shell-10.PNG)
