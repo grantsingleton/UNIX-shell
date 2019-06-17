@@ -70,7 +70,7 @@ while(1) {
 ```
 ### Process Input
 
-In the Process Command function, I declare a stringstream and read the user input delimiting at every pipe operator ('|'). Each command is then placed in a vector. More than one command in the vector is an indicator that the user is piping.  
+In the Process Command function, I declare a stringstream and read the user input delimiting at every pipe operator ('\|'). Each command is then placed in a vector. More than one command in the vector is an indicator that the user is piping.  
 
 ```
 stringstream command_string(cmd);
