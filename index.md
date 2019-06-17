@@ -44,6 +44,25 @@ I made a small text file called "animals.txt" that I will use to demonstrate pip
 
 ## Implemention 
 
+The program loops indefinitely, reads in user input, and processes that input. The following code demonstrates this process in the main function. The current working directory is obtained using the getwd() function, and displayed to the user. The program then waits for the user to input a command and then processes it in the processCommand() function. 
+
 ```
-cout << "Hello World";
+while(1) {
+  cout << username;
+  char buffer[PATH_MAX];
+  vector<char> current_path;
+  
+  getwd(buffer);
+  
+  int i = 0;
+  while(buffer[i] != 0) {
+    current_path.push_back(buffer[i]);
+    i++
+  }
+  
+  cout << current_path << "$ ";
+  
+  getline(cin, command);
+  processCommand(command);
+}
 ```
