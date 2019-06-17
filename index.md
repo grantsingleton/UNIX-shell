@@ -44,6 +44,6 @@ I made a small text file called "animals.txt" that I will use to demonstrate pip
 
 ## Implemention 
 
-'''
+```
 cout << "Hello World";
-'''
+```
