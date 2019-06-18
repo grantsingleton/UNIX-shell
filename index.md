@@ -154,58 +154,41 @@ for (int i = 0; i < command_list.size(); i++) {
   }
   
   pidd = fork();
-  if (pidd == 0)
-  {
-      if (i != 0 && i != command_list.size() - 1)
-      {
-          if (pipe_num)
-          {
-              dup2(fd1[0], 0); // input from prev pipe
-              dup2(fd[1], 1);  // output to next pipe
-          }
-          else 
-          {
-              dup2(fd[0], 0);  // input from prev pipe
-              dup2(fd1[1], 1); // output to next pipe
-          }
-      } 
-      else if (i == 0)
-      {
-          if (pipe_num)
-          {
-              dup2 (fd[1], 1); 
-          }
-          else 
-          {   
-              dup2(fd1[1], 1); 
-          }
-      } 
-      else 
-      {
-          if (pipe_num)
-          {   
-              dup2 (1, fd[1]); // map output back to stdout
-              dup2 (fd[0], 0); 
-          }
-          else 
-          {
-              dup2 (1, fd1[1]);  // map output back to stdout
-              dup2 (fd1[0], 0); 
-          }
+  if (pidd == 0) {
+    if (i != 0 && i != command_list.size() - 1) {
+      if (pipe_num) {
+          dup2(fd1[0], 0); // input from prev pipe
+          dup2(fd[1], 1);  // output to next pipe
+      } else {
+          dup2(fd[0], 0);  // input from prev pipe
+          dup2(fd1[1], 1); // output to next pipe
       }
-
-      execvp(arglist[0], arglist);
-      // if the command fails, restore everything to stdI/O and give error
-      dup2 (1, fd[1]);
-      dup2 (0, fd[0]);
-      dup2 (1, fd1[1]);
-      dup2 (0, fd1[0]);
-      cout << "error: no command '" << arglist[0] << "' found" << endl;
-      exit(0);
+  } else if (i == 0) {
+      if (pipe_num) {
+          dup2 (fd[1], 1); 
+      } else {   
+          dup2(fd1[1], 1); 
+      }
+  } else {
+      if (pipe_num) {   
+          dup2 (1, fd[1]); // map output back to stdout
+          dup2 (fd[0], 0); 
+      } else {
+          dup2 (1, fd1[1]);  // map output back to stdout
+          dup2 (fd1[0], 0); 
+      }
   }
-  else 
-  {
-      // restore stdout after each execution so that we don't lose our console 
+
+    execvp(arglist[0], arglist);
+    // if the command fails, restore and give error
+    dup2 (1, fd[1]);
+    dup2 (0, fd[0]);
+    dup2 (1, fd1[1]);
+    dup2 (0, fd1[0]);
+    cout << "error: no command '" << arglist[0] << "' found" << endl;
+    exit(0);
+  } else {
+      // restore stdout after each execution 
       dup2 (1, fd[1]);
       dup2 (1, fd1[1]);
       wait(&pidd);
@@ -213,3 +196,7 @@ for (int i = 0; i < command_list.size(); i++) {
 }
 ```
 The algorithm loops through every command, places a pipe between the commands, and executes the command. The pipes alternate each loop. For the first command in the vector, the standard output is redirected to the pipe using dup2, while the standard input remains the same. If the program is somewhere in the middle of the command vector, I redirect the output of the previous pipe to be the input to the current command, and the output of the current command to be the input to the next pipe. Finally, on the last command in the vector, I map the output back to stdout and the final solution will appear in the shell for the user to see. Once the input and output has been mapped, execvp() is called to execute the command. At the end of each loop, I restore stdout/stdin so that the user doesn't lose the command line. 
+
+## Comments
+
+I have not included my full solution or made my repository for this project public since it is a current project at the University and I do not want to aid plaigarism. 
