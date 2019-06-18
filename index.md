@@ -122,5 +122,94 @@ if (pidd == 0) {
 
 ### Piping 
 
-Here is my solution for any number of pipes. 
+My solution supports the use of any number of pipes. I used a 'leap frog' algorithm so that no matter how many pipes are needed, only two pipes are ever used. In order to redirect commands to go through the pipe instead of standard input and output (stdin/stdout), I use a Linux system function called dup2.
 
+```
+int dup2(int oldfd, int newfd);
+```
+This function creates a copy of oldfd so that when newfd is used, it is writing to oldfd. Here is an exmple, if I want to redirect the standard output to go to the pipe instead of (in this case) the command line I will call:
+
+```
+int fd[2];
+pipe(fd);
+dup2(fd[1], 1);
+```
+Now, all standard output will instead go to the pipe. Once a pipe is read from, it no longer contains useful data, so it is repositioned to be collect the input for two commands down the line. Below is my solution for supporting an arbitrary number of pipes (explanation following):
+
+```
+pid_t pidd;
+int fd[2];  
+int fd1[2];
+int pipe_num = 0;
+
+for (int i = 0; i < command_list.size(); i++) {
+  if (i == command_list.size() - 1) {
+            // we don't need another pipe
+  } else if (pipe_num == 0) {
+      pipe (fd);
+      pipe_num = 1;
+  } else if (pipe_num == 1) {
+      pipe (fd1);
+      pipe_num = 0;
+  }
+  
+  pidd = fork();
+  if (pidd == 0)
+  {
+      if (i != 0 && i != command_list.size() - 1)
+      {
+          if (pipe_num)
+          {
+              dup2(fd1[0], 0); // input from prev pipe
+              dup2(fd[1], 1);  // output to next pipe
+          }
+          else 
+          {
+              dup2(fd[0], 0);  // input from prev pipe
+              dup2(fd1[1], 1); // output to next pipe
+          }
+      } 
+      else if (i == 0)
+      {
+          if (pipe_num)
+          {
+              dup2 (fd[1], 1); 
+          }
+          else 
+          {   
+              dup2(fd1[1], 1); 
+          }
+      } 
+      else 
+      {
+          if (pipe_num)
+          {   
+              dup2 (1, fd[1]); // map output back to stdout
+              dup2 (fd[0], 0); 
+          }
+          else 
+          {
+              dup2 (1, fd1[1]);  // map output back to stdout
+              dup2 (fd1[0], 0); 
+          }
+      }
+
+      execvp(arglist[0], arglist);
+      // if the command fails, restore everything to stdI/O and give error
+      dup2 (1, fd[1]);
+      dup2 (0, fd[0]);
+      dup2 (1, fd1[1]);
+      dup2 (0, fd1[0]);
+      cout << "error: no command '" << arglist[0] << "' found" << endl;
+      exit(0);
+  }
+  else 
+  {
+      // restore stdout after each execution so that we don't lose our console 
+      dup2 (1, fd[1]);
+      dup2 (1, fd1[1]);
+      wait(&pidd);
+  }
+}
+```
+The algorithm loops through every command, places a pipe between the commands, and executes the command. The pipes alternate each loop. For the first command in the vector, the standard output is redirected to the pipe using dup2, while the standard input remains the same. If the program is somewhere in the middle of the command vector, I redirect the output of the previous pipe to be the input to the current command, and the output of the current command to be the input to the next pipe. Finally, on the last command in the vector, I map the output back to stdout and the final solution will appear in the shell for the user to see. Once the input and output has been mapped, execvp() is called to execute the command. At the end of each loop, I restore stdout/stdin so that the user doesn't lose the command line. 
