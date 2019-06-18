@@ -1,5 +1,5 @@
 ## Description
-This is a basic UNIX shell implementation that is running on a Linux sub-system in Windows, written in C++. Here is how it works...
+This is a basic UNIX shell implementation that is running on a Linux sub-system in Windows, written in C++. Here is how it works... Just like the command line!
 
 ### Enter the Shell
 
