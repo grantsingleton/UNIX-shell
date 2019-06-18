@@ -88,7 +88,7 @@ while(getline(command_string, temp_arg, '|')) {
 
 ### Execute Commands
 
-I support background process calling in my implementation so I need to check if any background processes are complete so that I can acknowledge them, effectively killing their zombie status. 
+I support background process calling in my implementation so I need to check if any background processes are complete so that I can acknowledge them, effectively killing their zombie status. The WNOHANG flag is what prevents the program from halting until a child is terminated. This flag is necessary, otherwise this would not be a background process since the program would get stuck here. The function checks to see if there are any children that have terminated, if not, the program moves on. 
 
 ```
 pid_t pidd = 0;
