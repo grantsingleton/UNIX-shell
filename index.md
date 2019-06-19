@@ -128,7 +128,7 @@ if (pidd == 0) {
 }
 ```
 
-### Piping 
+### *Leap Frog* Piping Algorithm 
 
 My solution supports the use of any number of pipes. I used a 'leap frog' algorithm so that no matter how many pipes are needed, only two pipes are ever used. In order to redirect commands to go through the pipe instead of standard input and output (stdin/stdout), I use a Linux system function called dup2.
 
