@@ -1,5 +1,13 @@
 ## Description
-This is a basic UNIX shell implementation that is running on a Linux sub-system in Windows, written in C++. Here is how it works... Just like the command line!
+This is a basic UNIX shell implementation that is running on a Linux sub-system in Windows, written in C++. 
+
+## Tools
+* Child Processes (Forking)
+* Interprocess Communication (Piping)
+* I/O Redirection (Dup2)
+
+## Demonstration 
+Here is a demonstration of the shell operating in bashed Powershell. 
 
 ### Enter the Shell
 
