@@ -56,7 +56,7 @@ I made a small text file called "animals.txt" that I will use to demonstrate pip
 
 The program loops indefinitely, reads in user input, and processes that input. The following code demonstrates this process in the main function. The current working directory is obtained using the getwd() function, and displayed to the user. The program then waits for the user to input a command and then processes it in the processCommand() function. 
 
-```
+```java
 while(1) {
   cout << username;
   char buffer[PATH_MAX];
@@ -80,7 +80,7 @@ while(1) {
 
 In the Process Command function, I declare a stringstream and read the user input delimiting at every pipe operator ('\|'). Each command is then placed in a vector. More than one command in the vector is an indicator that the user is piping.  
 
-```
+```java
 stringstream command_string(cmd);
 string temp_arg;
 vector <string> command_vec;
@@ -98,14 +98,14 @@ while(getline(command_string, temp_arg, '|')) {
 
 I support background process calling in my implementation so I need to check if any background processes are complete so that I can acknowledge them, effectively killing their zombie status. The WNOHANG flag is what prevents the program from halting until a child is terminated. This flag is necessary, otherwise this would not be a background process since the program would get stuck here. The function checks to see if there are any children that have terminated, if not, the program moves on. 
 
-```
+```java
 pid_t pidd = 0;
 pid_t result = waitpid(pidd, NULL, WNOHANG);
 ```
 
 The next lines check if the program needs to pipe (I explain how pipeCommands() works further down the page).
 
-```
+```java
 if (command_list.size() > 1){
         pipeCommands(command_list);
         return true;
@@ -117,7 +117,7 @@ The program then checks for a series of commands, cd (change directory), &(backg
 
 Here is how the most basic commands are executed. The program forks and the child process executes the command while the parent waits. Since the parent is waiting for the child, the user will not be able to perform any commands until the process has executed (not the case with background process execution). Also, the reason we don't execute the command in the parent is because we would lose the program since execvp() terminates the program on completion.
 
-```
+```java
 int pidd = fork();
 if (pidd == 0) {
   execvp(arglist[0], arglist);
@@ -132,19 +132,19 @@ if (pidd == 0) {
 
 My solution supports the use of any number of pipes. I used a 'leap frog' algorithm so that no matter how many pipes are needed, only two pipes are ever used. In order to redirect commands to go through the pipe instead of standard input and output (stdin/stdout), I use a Linux system function called dup2.
 
-```
+```java
 int dup2(int oldfd, int newfd);
 ```
 This function creates a copy of oldfd so that when newfd is used, it is writing to oldfd. Here is an exmple, if I want to redirect the standard output to go to the pipe instead of (in this case) the command line I will call:
 
-```
+```java
 int fd[2];
 pipe(fd);
 dup2(fd[1], 1);
 ```
 Now, all standard output will instead go to the pipe. Once a pipe is read from, it no longer contains useful data, so it is repositioned to be collect the input for two commands down the line. Below is my solution for supporting an arbitrary number of pipes (explanation following):
 
-```
+```java
 pid_t pidd;
 int fd[2];  
 int fd1[2];
