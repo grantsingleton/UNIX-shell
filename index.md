@@ -142,7 +142,7 @@ int fd[2];
 pipe(fd);
 dup2(fd[1], 1);
 ```
-Now, all standard output will instead go to the pipe. Once a pipe is read from, it no longer contains useful data, so it is repositioned to be collect the input for two commands down the line. Below is my solution for supporting an arbitrary number of pipes (explanation following):
+Now, all standard output will instead go to the pipe. Once a pipe is read from, it no longer contains useful data, so it is repositioned to collect the input for two commands down the line. Below is my solution for supporting an arbitrary number of pipes (explanation following):
 
 ```java
 pid_t pidd;
